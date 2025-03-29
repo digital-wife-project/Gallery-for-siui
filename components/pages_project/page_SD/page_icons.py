@@ -7,7 +7,7 @@ from siui.core import SiColor, GlobalFont
 from siui.core import SiGlobal
 from siui.core import Si
 from siui.gui import SiFont
-from ..option_card import OptionCardPlaneForWidgetDemos
+from ... option_card import OptionCardPlaneForWidgetDemos
 
 import random
 
@@ -30,8 +30,11 @@ class DemoLabel(SiLabel):
                            f"background-color: {self.getColor(SiColor.INTERFACE_BG_D)}")
 
 
-class ExampleContainer(SiPage):
+
+
+class SD(SiPage):
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         super().__init__(*args, **kwargs)
         self.message_type = 0
         self.setPadding(64)
@@ -47,8 +50,8 @@ class ExampleContainer(SiPage):
         with self.titled_widgets_group as group:
             # 竖直密堆积容器
             self.dense_v_container = OptionCardPlaneForWidgetDemos(self)
-            self.dense_v_container.setSourceCodeURL("https://github.com/ChinaIceF/PyQt-SiliconUI/blob/main/siui/components"
-                                                    "/widgets/progress_bar/progress_bar.py")
+            # self.dense_v_container.setSourceCodeURL("https://github.com/ChinaIceF/PyQt-SiliconUI/blob/main/siui/components"
+            #                                         "/widgets/progress_bar/progress_bar.py")
             self.dense_v_container.setTitle("竖直密堆积容器")
 
             self.demo_dense_v_container = SiDenseVContainer(self)

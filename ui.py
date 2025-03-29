@@ -1,10 +1,14 @@
 ﻿import icons
 from components.page_about import About
 from components.page_tools import ExampleContainer
-from components.page_setting import ExampleFunctional
 from components.page_homepage import ExampleHomepage
-from components.page_download import ExampleIcons
-from components.page_launch import RefactoredWidgets
+
+from components.pages_project.page_digitalhuman import digitalhuman
+from components.pages_project.page_LLM import LLM
+from components.pages_project.page_TTS import TTS
+from components.pages_project.page_others import others
+from components.pages_project.page_SD import SD
+
 from components.page_QA import ExampleWidgets
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDesktopWidget
@@ -34,20 +38,24 @@ class MySiliconApp(SiliconApplication):
         self.layerMain().addPage(ExampleHomepage(self),
                                  icon=SiGlobal.siui.iconpack.get("ic_fluent_home_filled"),
                                  hint="主页", side="top")
-        self.layerMain().addPage(ExampleIcons(self),
+
+        self.layerMain().addPage(TTS(self),
                                  icon=SiGlobal.siui.iconpack.get("ic_fluent_person_voice_regular"),
                                  hint="TTS", side="top")
 
-        self.layerMain().addPage(ExampleIcons(self),
+        self.layerMain().addPage(LLM(self),
                                  icon=SiGlobal.siui.iconpack.get("ic_fluent_textbox_regular"),
                                  hint="LLM", side="top")
-        self.layerMain().addPage(ExampleIcons(self),
+
+        self.layerMain().addPage(SD(self),
                                  icon=SiGlobal.siui.iconpack.get("ic_fluent_wand_filled"),
                                  hint="SD", side="top")
-        self.layerMain().addPage(ExampleIcons(self),
+
+        self.layerMain().addPage(digitalhuman(self),
                                  icon=SiGlobal.siui.iconpack.get("ic_fluent_scan_person_filled"),
                                  hint="数字人", side="top")
-        self.layerMain().addPage(ExampleIcons(self),
+
+        self.layerMain().addPage(others(self),
                                  icon=SiGlobal.siui.iconpack.get("ic_fluent_desktop_arrow_down_filled"),
                                  hint="其他", side="top")
 
