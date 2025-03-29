@@ -1,4 +1,8 @@
-﻿from PyQt5.QtCore import Qt
+import asyncio
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication
+import sys
+from ...openi_download import OpeniDownloadWorker
 
 from siui.components import SiTitledWidgetGroup, SiLabel, SiDenseHContainer, SiDenseVContainer, SiDividedHContainer, \
     SiDividedVContainer, SiFlowContainer, SiDraggableLabel, SiSimpleButton, SiPushButton, SiMasonryContainer
@@ -19,13 +23,16 @@ from siui.components.button import (
     SiSwitchRefactor,
     SiToggleButtonRefactor,
 )
+from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
 
 import random
-
+import schedule
+import threading
+import time
 
 class TTS(SiPage):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         super().__init__(*args, **kwargs)
         self.message_type = 0
         self.setPadding(64)
@@ -41,8 +48,6 @@ class TTS(SiPage):
         with self.titled_widgets_group as group:
             # 竖直密堆积容器
             self.dense_v_container = OptionCardPlaneForWidgetDemos(self)
-            # self.dense_v_container.setSourceCodeURL("https://github.com/ChinaIceF/PyQt-SiliconUI/blob/main/siui/components"
-            #                                         "/widgets/progress_bar/progress_bar.py")
             self.dense_v_container.setTitle("竖直密堆积容器")
 
             self.demo_dense_v_container = SiDenseVContainer(self)
@@ -54,11 +59,14 @@ class TTS(SiPage):
             self.demo_progress_button_text = SiProgressPushButton(self)
             self.demo_progress_button_text.setText("启动")
             self.demo_progress_button_text.setToolTip("点击以开始下载或使用")
-            self.demo_progress_button_text.clicked.connect(lambda: self.demo_progress_button_text.setProgress(random.random() * 1.3))
+            self.demo_progress_button_text.clicked.connect(self.download_button_clicked)
+            
+
             self.demo_progress_button_text.adjustSize()
 
             self.demo_push_button_text = SiPushButtonRefactor(self)
             self.demo_push_button_text.setText("项目管理")
+            self.demo_push_button_text.clicked.connect(self.download_button_clicked)  # 连接点击信号到槽函数
             self.demo_push_button_text.adjustSize()
 
             self.demo_label_hinted = SiLabel(self)
@@ -70,12 +78,11 @@ class TTS(SiPage):
             self.demo_label.setSiliconWidgetFlag(Si.AdjustSizeOnTextChanged)
             self.demo_label.setText("               ")
 
+            container.addWidget(self.demo_label, "right")
+            container.addWidget(self.demo_progress_button_text, "right")
+            container.addWidget(self.demo_push_button_text, "right")
 
-            container.addWidget(self.demo_progress_button_text,"right")
-            container.addWidget(self.demo_push_button_text,"right")
-            container.addWidget(self.demo_label,"left")
-            container.addWidget(self.demo_label_hinted,"left")
-
+            container.addWidget(self.demo_label_hinted, "left")
 
             self.demo_dense_v_container.addWidget(container)
 
@@ -83,10 +90,32 @@ class TTS(SiPage):
             self.dense_v_container.body().addPlaceholder(12)
             self.dense_v_container.adjustSize()
 
-            # group.addWidget(self.dense_h_container)
             group.addWidget(self.dense_v_container)
         # 添加页脚的空白以增加美观性
         self.titled_widgets_group.addPlaceholder(64)
 
         # 设置控件组为页面对象
         self.setAttachment(self.titled_widgets_group)
+
+    def download_button_clicked(self):
+        if self.message_type == 0:
+            print("下载")
+            self.demo_progress_button_text.setText("正在下载")
+            self.download_worker = OpeniDownloadWorker("wyyyz/dig","HiyoriUI-0.8.0.zip",".")
+            self.download_worker.presentage_updated.connect(self.on_presentage_updated)
+            self.download_worker.size_updated.connect(self.on_size_updated)
+            self.download_worker.on_download_finished.connect(self.finished)
+            self.download_worker.start()
+
+    def on_presentage_updated(self, percentage):
+        self.demo_progress_button_text.setProgress(percentage/100)
+        print(f"Download percentage: {percentage}%")
+
+    def on_size_updated(self, size):
+        print(f"Download size: {size}")
+
+    def finished(self):
+        self.demo_progress_button_text.setText("启动")
+
+
+
