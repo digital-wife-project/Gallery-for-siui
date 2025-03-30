@@ -1,12 +1,16 @@
-﻿from siui.components import SiLabel, SiLongPressButton, SiPushButton
+﻿from PyQt5.QtCore import pyqtSignal
+from siui.components import SiLabel, SiLongPressButton, SiPushButton
 from siui.core import SiColor, SiGlobal
 from siui.templates.application.components.dialog.modal import SiModalDialog
 
 
 class ModalDownloadDialog(SiModalDialog):
+    on_install_start=pyqtSignal(str)
     def __init__(self,*args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(args[0], **kwargs)
         self.setFixedWidth(500)
+        self.project_name=args[1]
+
         self.icon().load(SiGlobal.siui.iconpack.get("ic_fluent_save_filled",
                                                     color_code=SiColor.mix(
                                                         self.getColor(SiColor.SVG_NORMAL),
@@ -17,7 +21,7 @@ class ModalDownloadDialog(SiModalDialog):
         label = SiLabel(self)
         label.setStyleSheet(f"color: {self.getColor(SiColor.TEXT_E)}")
         label.setText(
-            f'<span style="color: {self.getColor(SiColor.TEXT_B)}">选择项目的安装位置</span><br>'
+            f'<span style="color: {self.getColor(SiColor.TEXT_B)}">选择项目{self.project_name}的安装位置</span><br>'
         )
         label.adjustSize()
         self.contentContainer().addWidget(label)
@@ -38,6 +42,7 @@ class ModalDownloadDialog(SiModalDialog):
         self.button3.setFixedHeight(32)
         self.button3.attachment().setText("开始下载与安装")
         self.button3.longPressed.connect(SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().closeLayer)
+        self.button3.longPressed.connect(self.on_install_start.emit(self.project_name))
 
         button4 = SiPushButton(self)
         button4.setFixedHeight(32)

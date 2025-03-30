@@ -80,10 +80,8 @@ class TTS(SiPage):
             self.demo_progress_button_text = SiProgressPushButton(self)
             self.demo_progress_button_text.setText("启动")
             self.demo_progress_button_text.setToolTip("点击以开始下载或使用")
-            self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self)))
+            self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self,"game.zip")))
             
-            print("test")
-
             self.demo_progress_button_text.adjustSize()
 
             self.demo_push_button_text = SiPushButtonRefactor(self)
