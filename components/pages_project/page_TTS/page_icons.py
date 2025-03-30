@@ -17,6 +17,7 @@ from siui.components import (
     SiLineEditWithItemName,
     SiOptionCardLinear,
     SiTitledWidgetGroup,
+    SiOptionCardPlane,
     SiWidget,
     )
 from siui.components.button import (
@@ -54,11 +55,12 @@ from siui.components.progress_bar import SiProgressBar
 from siui.components.slider import SiSliderH
 from siui.components.slider_ import SiCoordinatePicker2D, SiCoordinatePicker3D, SiSlider
 from siui.components.spinbox.spinbox import SiDoubleSpinBox, SiIntSpinBox
+from siui.components.page.child_page import SiChildPage
 
 from siui.core import Si, SiColor, SiGlobal,GlobalFont
 from siui.gui import SiFont
 
-import sys
+from ..project_detail import ChildPage_ProjectDetail
 from ..model_windows import ModalDownloadDialog
 from ...openi_download import OpeniDownloadWorker
 from ...unziper import UnzipThread
@@ -69,6 +71,7 @@ import random
 import schedule
 import threading
 import time
+import json
 
 class DemoLabel(SiLabel):
     def __init__(self, parent, text,hint):
@@ -118,15 +121,15 @@ class TTS(SiPage):
             self.demo_progress_button_text.setText("启动")
             self.demo_progress_button_text.setToolTip("点击以开始下载或使用")
             self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self,"game.zip")))
-            
             self.demo_progress_button_text.adjustSize()
 
             self.demo_push_button_text = SiPushButtonRefactor(self)
             self.demo_push_button_text.setText("项目管理")
-            self.demo_push_button_text.clicked.connect(self.download_bert_button_clicked)  # 连接点击信号到槽函数
+            self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self)))  # 连接点击信号到槽函数
             self.demo_push_button_text.adjustSize()
 
-            container.addWidget(DemoLabel(self,"bert","使用 setHint 方法设置工具提示"), "left")
+            container.addWidget(DemoLabel(self,"Bert-VITS2                                                                                         ",
+                                          "一个开源的语音合成项目"), "left")
             container.addWidget(self.demo_progress_button_text, "right")
             container.addWidget(self.demo_push_button_text, "right")
 
@@ -146,6 +149,13 @@ class TTS(SiPage):
 
         # 设置控件组为页面对象
         self.setAttachment(self.titled_widgets_group)
+
+    def save_config(name,path,bat):
+    #设置./config/projects/{name}.json中的文件的内容
+        with open(f'./config/projects/{name}.json', 'w') as f:
+            json.dump({"path": path, "bat": bat}, f)
+        pass
+
 
     def download_bert_button_clicked(self):
         if self.message_type == 0:
