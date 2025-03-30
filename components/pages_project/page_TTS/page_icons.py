@@ -1,4 +1,4 @@
-import asyncio
+﻿import asyncio
 import datetime
 import random
 
@@ -212,10 +212,12 @@ class ChildPageExample2(SiChildPage):
             self.line_edit_title = SiLineEditWithItemName(self)
             self.line_edit_title.setName("项目根目录")
             self.line_edit_title.setFixedHeight(32)
+            text_content = self.line_edit_title.text()
 
             self.line_edit_description = SiLineEditWithItemName(self)
             self.line_edit_description.setName("项目启动bat")
             self.line_edit_description.setFixedHeight(32)
+            text_content = self.line_edit_description.text()
 
             self.option_card_general.body().setAdjustWidgetsSize(True)
             self.option_card_general.body().addWidget(self.line_edit_title)
