@@ -5,11 +5,11 @@ from PyQt5.QtCore import QThread, pyqtSignal, QObject
 class OpeniDownloadWorker(QThread):
 
     presentage_updated = pyqtSignal(int)
-    on_download_finished = pyqtSignal(str)
+    on_download_finished = pyqtSignal(str,str)
 
-    def __init__(self, repoid, file, savepath):
+    def __init__(self,project_name, repoid, file, savepath):
         super().__init__()
-        print("OpeniDownloadWorker init")
+        self.project_name=project_name
         self.repoid = repoid
         self.file = file
         self.savepath = savepath
@@ -32,7 +32,7 @@ class OpeniDownloadWorker(QThread):
                 self.presentage_updated.emit(int(percentage))
 
         process.stdout.close()
-        self.on_download_finished.emit(self.file)
+        self.on_download_finished.emit(self.file,self.project_name)
         process.wait()
 
     def attackdetail(self, line):

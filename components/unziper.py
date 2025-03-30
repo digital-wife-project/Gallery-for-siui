@@ -8,10 +8,11 @@ class UnzipThread(QThread):
     # 创建一个信号，用于更新进度条
     progress = pyqtSignal(int)
     # 创建一个信号，用于表示解压完成
-    finished_unzipping = pyqtSignal()
+    finished_unzipping = pyqtSignal(str)
 
-    def __init__(self, zip_file_path, extract_path):
+    def __init__(self, zip_file_path, extract_path,project_name):
         super().__init__()
+        self.project_name=project_name
         self.zip_file_path = zip_file_path
         self.extract_path = extract_path
 
@@ -32,4 +33,4 @@ class UnzipThread(QThread):
 
             # 发送信号表示解压完成
 
-            self.finished_unzipping.emit()
+            self.finished_unzipping.emit(self.project_name)
