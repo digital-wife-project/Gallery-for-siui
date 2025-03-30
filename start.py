@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import time
 
 from PyQt5.QtCore import QTimer
@@ -7,10 +7,6 @@ from ui import MySiliconApp
 
 import siui
 from siui.core import SiGlobal
-
-#
-# siui.gui.set_scale_factor(1)
-
 
 def show_version_message(window):
     window.LayerRightMessageSidebar().send(

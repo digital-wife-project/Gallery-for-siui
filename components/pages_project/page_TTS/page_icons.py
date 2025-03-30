@@ -1,8 +1,9 @@
-import asyncio
+﻿import asyncio
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 import sys
 from ...openi_download import OpeniDownloadWorker
+from ...unziper import UnzipThread
 
 from siui.components import SiTitledWidgetGroup, SiLabel, SiDenseHContainer, SiDenseVContainer, SiDividedHContainer, \
     SiDividedVContainer, SiFlowContainer, SiDraggableLabel, SiSimpleButton, SiPushButton, SiMasonryContainer
@@ -76,13 +77,15 @@ class TTS(SiPage):
 
             self.demo_label = SiLabel(self)
             self.demo_label.setSiliconWidgetFlag(Si.AdjustSizeOnTextChanged)
-            self.demo_label.setText("               ")
 
-            container.addWidget(self.demo_label, "right")
             container.addWidget(self.demo_progress_button_text, "right")
             container.addWidget(self.demo_push_button_text, "right")
-
             container.addWidget(self.demo_label_hinted, "left")
+
+            container.setAdjustWidgetsSize(True)
+            container.addPlaceholder(12)
+            container.adjustSize()
+
 
             self.demo_dense_v_container.addWidget(container)
 
@@ -101,21 +104,26 @@ class TTS(SiPage):
         if self.message_type == 0:
             print("下载")
             self.demo_progress_button_text.setText("正在下载")
-            self.download_worker = OpeniDownloadWorker("wyyyz/dig","HiyoriUI-0.8.0.zip",".")
+            self.download_worker = OpeniDownloadWorker("wyyyz/dig","game.zip","./tmp")
             self.download_worker.presentage_updated.connect(self.on_presentage_updated)
-            self.download_worker.size_updated.connect(self.on_size_updated)
-            self.download_worker.on_download_finished.connect(self.finished)
+            self.download_worker.on_download_finished.connect(self.download_finished)
             self.download_worker.start()
 
     def on_presentage_updated(self, percentage):
         self.demo_progress_button_text.setProgress(percentage/100)
         print(f"Download percentage: {percentage}%")
 
-    def on_size_updated(self, size):
-        print(f"Download size: {size}")
+    def download_finished(self,filename):
+        self.demo_progress_button_text.setText("正在解压")
+        self.unzip(filename)
 
-    def finished(self):
-        self.demo_progress_button_text.setText("启动")
+    def unzip(self,filename):
+        self.unzipThread = UnzipThread(f'./tmp/{filename}','./project')
+        self.unzipThread.progress.connect(self.on_presentage_updated)
+        self.unzipThread.finished_unzipping.connect(self.unzipFinished)
+        self.unzipThread.start()
 
+    def unzipFinished(self):
+        self.demo_progress_button_text.setText("解压完成")
 
 
