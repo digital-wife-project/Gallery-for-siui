@@ -1,19 +1,24 @@
-﻿import asyncio
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
-import sys
-from ..model_windows import ModalDownloadDialog
-from ...openi_download import OpeniDownloadWorker
-from ...unziper import UnzipThread
+﻿from PyQt5.QtCore import Qt,QPointF, QRectF,QThread, pyqtSignal
+from PyQt5.QtWidgets import QApplication,QWidget, QPushButton, QVBoxLayout
 
-from siui.components import SiTitledWidgetGroup, SiLabel, SiDenseHContainer, SiDenseVContainer, SiDividedHContainer, \
-    SiDividedVContainer, SiFlowContainer, SiDraggableLabel, SiSimpleButton, SiPushButton, SiMasonryContainer
-from siui.components.page import SiPage
-from siui.core import SiColor, GlobalFont
-from siui.core import SiGlobal
-from siui.core import Si
-from siui.gui import SiFont
-from ... option_card import OptionCardPlaneForWidgetDemos
+from siui.components import (
+    SiLabel,
+    SiDenseHContainer,
+    SiDividedHContainer,
+    SiDividedVContainer,
+    SiFlowContainer,
+    SiDraggableLabel, 
+    SiSimpleButton, 
+    SiPushButton, 
+    SiMasonryContainer,
+    SiCircularProgressBar,
+    SiDenseVContainer,
+    SiLineEditWithDeletionButton,
+    SiLineEditWithItemName,
+    SiOptionCardLinear,
+    SiTitledWidgetGroup,
+    SiWidget,
+    )
 from siui.components.button import (
     SiFlatButton,
     SiLongPressButtonRefactor,
@@ -25,9 +30,41 @@ from siui.components.button import (
     SiSwitchRefactor,
     SiToggleButtonRefactor,
 )
-from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
+from siui.components.widgets import (
+    SiCheckBox,
+    SiDenseHContainer,
+    SiDraggableLabel,
+    SiIconLabel,
+    SiLabel,
+    SiLongPressButton,
+    SiPixLabel,
+    SiPushButton,
+    SiRadioButton,
+    SiSimpleButton,
+    SiSwitch,
+    SiToggleButton,
+)
+from siui.components.chart import SiTrendChart
+from siui.components.combobox import SiComboBox
+from siui.components.editbox import SiLineEdit
+from siui.components.label import HyperRoundBorderTest
+from siui.components.menu import SiMenu
+from siui.components.page import SiPage
+from siui.components.progress_bar import SiProgressBar
+from siui.components.slider import SiSliderH
+from siui.components.slider_ import SiCoordinatePicker2D, SiCoordinatePicker3D, SiSlider
+from siui.components.spinbox.spinbox import SiDoubleSpinBox, SiIntSpinBox
 
+from siui.core import Si, SiColor, SiGlobal,GlobalFont
+from siui.gui import SiFont
+
+import sys
+from ..model_windows import ModalDownloadDialog
+from ...openi_download import OpeniDownloadWorker
+from ...unziper import UnzipThread
+from ... option_card import OptionCardPlaneForWidgetDemos
+
+import datetime
 import random
 import schedule
 import threading
