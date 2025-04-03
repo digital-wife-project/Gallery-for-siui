@@ -1,4 +1,5 @@
-﻿from siui.components import (
+﻿from PyQt5.QtWidgets import QFileDialog
+from siui.components import (
     SiLabel,
     SiDenseHContainer,
     SiDividedHContainer,
@@ -19,16 +20,20 @@
     )
 from siui.core import Si, SiColor, SiGlobal,GlobalFont
 from siui.components.page.child_page import SiChildPage
+from .DemoLabel import DemoLabel
+
 
 
 
 class ChildPage_ProjectDetail(SiChildPage):
-    def __init__(self, *arg, **kwargs):
-        super().__init__(*arg, **kwargs)
+    def __init__(self,parent,project_path):
+        super().__init__(parent)
 
         self.view().setMinimumWidth(800)
         self.content().setTitle("项目管理")
         self.content().setPadding(64)
+        self.project_path=project_path
+        self.changed_path=""
 
         # page content
         self.titled_widget_group = SiTitledWidgetGroup(self)
@@ -37,21 +42,18 @@ class ChildPage_ProjectDetail(SiChildPage):
             self.option_card_general = SiOptionCardPlane(self)
             self.option_card_general.setTitle("启动设置")
 
-            self.line_edit_title = SiLineEditWithItemName(self)
-            self.line_edit_title.setName("项目根目录")
-            self.line_edit_title.setFixedHeight(32)
-            # text_content = self.line_edit_title.text()
-
-            self.line_edit_description = SiLineEditWithItemName(self)
-            self.line_edit_description.setName("项目启动bat")
-            self.line_edit_description.setFixedHeight(32)
-            # text_content = self.line_edit_description.text()
 
             self.option_card_general.body().setAdjustWidgetsSize(True)
-            self.option_card_general.body().addWidget(self.line_edit_title)
-            self.option_card_general.body().addWidget(self.line_edit_description)
+            self.option_card_general.body().addWidget(DemoLabel(self,f"当前项目根目录为{self.project_path}",""))
+            self.option_card_general.body().addWidget(DemoLabel(self,f"当前项目启动bat为{self.project_path}\launch.bat",""))
             self.option_card_general.body().addPlaceholder(12)
             self.option_card_general.adjustSize()
+
+            button2 = SiPushButton(self)
+            button2.setFixedHeight(32)
+            button2.attachment().setText("更改安装位置")
+            button2.colorGroup().assign(SiColor.BUTTON_PANEL, self.getColor(SiColor.INTERFACE_BG_D))
+            button2.clicked.connect(self.openFolderDialog)
 
             group.addWidget(self.option_card_general)
 
@@ -67,3 +69,9 @@ class ChildPage_ProjectDetail(SiChildPage):
 
         # load style sheet
         SiGlobal.siui.reloadStyleSheetRecursively(self)
+
+def openFolderDialog(self):
+    # 打开文件夹选择对话框
+    folder_path = QFileDialog.getExistingDirectory(self, "更改安装位置")
+    if folder_path:
+        self.changed_path = folder_path

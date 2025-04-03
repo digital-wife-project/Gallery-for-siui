@@ -1,19 +1,19 @@
 ﻿from PyQt5.QtCore import Qt, pyqtSignal
 from siui.components import (
-    SiLabel,
     SiDenseHContainer,
     )
 from siui.components.button import (
     SiProgressPushButton,
     SiPushButtonRefactor,
 )
-from siui.core import Si, SiColor, SiGlobal
+from siui.core import SiGlobal
 
 import os
 from .project_detail import ChildPage_ProjectDetail
 from .model_windows import ModalDownloadDialog
 from ..openi_download import OpeniDownloadWorker
 from ..launcher import BatRunner
+from .DemoLabel import DemoLabel
 from ..json_changer import json_changer,loacl_project_json_reader
 
 
@@ -35,8 +35,6 @@ class Row_for_each_project(SiDenseHContainer):
         
         self.demo_push_button_text = SiPushButtonRefactor(self)
         self.demo_push_button_text.setText("项目管理")
-        self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self)))  # 连接点击信号到槽函数
-        self.demo_push_button_text.adjustSize()
 
         if self.project_path !=None:
             self.demo_progress_button_text.setText("开始使用")
@@ -44,6 +42,9 @@ class Row_for_each_project(SiDenseHContainer):
             self.demo_progress_button_text.setProgress(100)
             self.demo_progress_button_text.adjustSize()
             self.demo_progress_button_text.clicked.connect(self.launch_click)
+            self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self,self.project_path)))  # 连接点击信号到槽函数
+            self.demo_push_button_text.adjustSize()
+
 
         else:
             self.demo_progress_button_text.setText("开始下载")
@@ -65,7 +66,7 @@ class Row_for_each_project(SiDenseHContainer):
         self.downloader(self.project_name,file_name,user_path)
 
     def launch_click(self):
-        self.demo_progress_button_text.setText("正在启动")
+        self.demo_progress_button_text.setText("正在运行")
         self.launcher = BatRunner(f"{self.project_path}/launch.bat")
         self.launcher.runBatFile()
 
@@ -91,24 +92,6 @@ class Row_for_each_project(SiDenseHContainer):
         abs_path = os.path.abspath(save_path)
         print(f"Download finished for file: {abs_path}")
         json_changer(project_name,abs_path)
-
-class DemoLabel(SiLabel):
-    def __init__(self, parent, text,hint):
-        super().__init__(parent)
-
-        self.setSiliconWidgetFlag(Si.AdjustSizeOnTextChanged)
-        self.setAlignment(Qt.AlignCenter)
-        self.setFixedHeight(32)
-
-        self.setFixedStyleSheet("border-radius: 4px")
-        self.setText(text)
-        self.setHint(hint)
-        self.adjustSize()
-        self.resize(self.width() + 24, self.height())
-
-    def reloadStyleSheet(self):
-        self.setStyleSheet(f"color: {self.getColor(SiColor.TEXT_B)};"
-                           f"background-color: {self.getColor(SiColor.INTERFACE_BG_D)}")
 
 
 
