@@ -1,0 +1,32 @@
+﻿{
+  "tts": {
+    "Bert": [
+      "一个语言合成项目",
+      "HiyoriUI-0.8.0.zip"
+    ]
+  },
+  "sd": {
+    "SD": [
+      "一个SD项目",
+      "HiyoriUI-0.8.0.zip"
+    ]
+  },
+  "llm": {
+    "LLM": [
+      "一个LLM项目",
+      "HiyoriUI-0.8.0.zip"
+    ]
+  },
+  "digitalhuman": {
+    "DigitalHuman": [
+      "一个数字人项目",
+      "HiyoriUI-0.8.0.zip"
+    ]
+  },
+  "others": {
+    "Others": [
+      "一个其他项目",
+      "HiyoriUI-0.8.0.zip"
+    ]
+  }
+}

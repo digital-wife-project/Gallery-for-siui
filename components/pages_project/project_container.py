@@ -14,7 +14,7 @@ from .project_detail import ChildPage_ProjectDetail
 from .model_windows import ModalDownloadDialog
 from ..openi_download import OpeniDownloadWorker
 from ..launcher import BatRunner
-from ..json_changer import json_changer,json_reader
+from ..json_changer import json_changer,loacl_project_json_reader
 
 
 
@@ -22,13 +22,12 @@ class Row_for_each_project(SiDenseHContainer):
 
     on_download_click = pyqtSignal(str,str)
 
-    def __init__(self,parent,project_name,project_detail,file_name,launch_command):
+    def __init__(self,parent,project_name,project_detail,file_name):
         self.project_name=project_name
         self.project_detail=project_detail
         self.file_name=file_name
-        self.launch_command=launch_command
-        self.project_path=json_reader(self.project_name)
 
+        self.project_path=loacl_project_json_reader(self.project_name)
 
         super().__init__(parent)
     

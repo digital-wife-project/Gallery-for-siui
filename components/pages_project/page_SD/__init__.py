@@ -1,1 +1,1 @@
-﻿from .page_icons import SD
+﻿from .page_SD import SD

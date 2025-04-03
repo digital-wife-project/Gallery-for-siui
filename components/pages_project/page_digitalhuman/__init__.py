@@ -1,1 +1,1 @@
-﻿from .page_icons import digitalhuman
+﻿from .page_digitalhuman import digitalhuman

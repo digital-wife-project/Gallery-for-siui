@@ -1,1 +1,1 @@
-﻿from .page_icons import TTS
+﻿from .page_tts import TTS
