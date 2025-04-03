@@ -42,7 +42,7 @@ class ModalDownloadDialog(SiModalDialog):
         self.button3.setFixedHeight(32)
         self.button3.attachment().setText("开始下载与安装")
         self.button3.longPressed.connect(SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().closeLayer)
-        self.button3.longPressed.connect(self.on_install_start.emit(self.project_name))
+        # self.button3.longPressed.connect(self.on_install_start.emit(self.project_name))
 
         button4 = SiPushButton(self)
         button4.setFixedHeight(32)
