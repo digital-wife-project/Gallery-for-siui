@@ -1,7 +1,6 @@
 ﻿import subprocess
 import re
 from PyQt5.QtCore import QThread, pyqtSignal, QObject
-from .unziper import UnzipThrea
 import zipfile
 import sys
 
@@ -9,8 +8,8 @@ import sys
 class OpeniDownloadWorker(QThread):
 
     presentage_updated = pyqtSignal(int)
-    on_download_finished = pyqtSignal(str,str)
-    finished_unzipping=pyqtSignal(str)
+    on_download_finished = pyqtSignal()
+    finished_unzipping=pyqtSignal(str,str)
 
     def __init__(self,project_name, repoid, file, savepath):
         super().__init__()
@@ -36,9 +35,10 @@ class OpeniDownloadWorker(QThread):
             if percentage:
                 self.presentage_updated.emit(int(percentage))
 
-        process.stdout.close()
-        self.on_download_finished.emit(self.file,self.project_name)
+        self.on_download_finished.emit()
         self.unzip(f"./tmp/{self.file}",self.savepath)
+
+        process.stdout.close()
         process.wait()
 
     def attackdetail(self, line):
@@ -64,7 +64,7 @@ class OpeniDownloadWorker(QThread):
 
             # 发送信号表示解压完成
 
-            self.finished_unzipping.emit(self.project_name)
+            self.finished_unzipping.emit(self.project_name,(self.savepath+self.file).filename[:-4])
 
 
     def stop(self):

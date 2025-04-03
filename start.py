@@ -8,6 +8,20 @@ from ui import MySiliconApp
 import siui
 from siui.core import SiGlobal
 
+import ctypes
+
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+def restart_as_admin():
+    if not is_admin():
+        # Re-run the program with admin rights
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+
+
 def show_version_message(window):
     window.LayerRightMessageSidebar().send(
         title="Welcome to Silicon UI Gallery",
@@ -34,6 +48,10 @@ def show_version_message(window):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    # if not is_admin():
+    #     restart_as_admin()
+    #     sys.exit(0)  # Exit the current instance
+
 
     window = MySiliconApp()
     window.show()
