@@ -1,12 +1,28 @@
 ﻿from PyQt5.QtWidgets import QFileDialog
 from siui.components import (
+    SiLabel,
+    SiDenseHContainer,
+    SiDividedHContainer,
+    SiDividedVContainer,
+    SiFlowContainer,
+    SiDraggableLabel, 
+    SiSimpleButton, 
     SiPushButton, 
+    SiMasonryContainer,
+    SiCircularProgressBar,
+    SiDenseVContainer,
+    SiLineEditWithDeletionButton,
+    SiLineEditWithItemName,
+    SiOptionCardLinear,
     SiTitledWidgetGroup,
     SiOptionCardPlane,
+    SiWidget,
     )
-import re
 from siui.core import Si, SiColor, SiGlobal,GlobalFont
 from siui.components.page.child_page import SiChildPage
+
+
+import re
 from .DemoLabel import DemoLabel
 from .side_message import send_simple_message
 from ..json_changer import json_rewriter
@@ -14,18 +30,13 @@ from ..FolderMover import FolderMover
 
 
 class ChildPage_ProjectDetail(SiChildPage):
-    def __init__(self,parent):
+    def __init__(self,parent,project_name,project_path):
         super().__init__(parent)
 
         self.view().setMinimumWidth(800)
         self.content().setTitle("项目管理")
         self.content().setPadding(64)
-        self.project_path="project_path"
-        self.project_name="Bert"
-
-        # self.project_path=project_path
-        # self.project_name=project_name
-        self.parent=parent
+        self.project_path=project_path
         self.changed_path=None
 
         # page content
