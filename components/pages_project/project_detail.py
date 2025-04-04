@@ -37,6 +37,7 @@ class ChildPage_ProjectDetail(SiChildPage):
         self.content().setTitle("项目管理")
         self.content().setPadding(64)
         self.project_path=project_path
+        self.project_name=project_name
         self.changed_path=None
 
         # page content
@@ -69,7 +70,7 @@ class ChildPage_ProjectDetail(SiChildPage):
         self.demo_button.attachment().setText("保存")
         self.demo_button.clicked.connect(self.closeParentLayer)
 
-        self.demo_button.clicked.connect(lambda: self.onSaveButtomClicked(self.parent))
+        self.demo_button.clicked.connect(lambda: self.onSaveButtomClicked(parent))
 
         self.panel().addWidget(self.demo_button, "right")
 
@@ -80,7 +81,7 @@ class ChildPage_ProjectDetail(SiChildPage):
         if self.changed_path!=None:
             self.folder_Mover=FolderMover(self.project_path,self.changed_path)
             self.folder_Mover.progress_updated.connect(parent.presentage_updated)
-
+            self.folder_Mover.start()
             json_rewriter(self.project_name,self.changed_path)
 
     def openFolderDialog(self):

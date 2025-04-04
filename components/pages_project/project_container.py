@@ -32,6 +32,7 @@ class Row_for_each_project(SiDenseHContainer):
         self.Refresh()
 
         self.demo_push_button_text.setText("项目管理")
+        self.demo_push_button_text.clicked.connect(lambda:self.Refresh())
         self.demo_push_button_text.adjustSize()
 
         self.addWidget(DemoLabel(self,self.project_name,self.project_detail), "left")
