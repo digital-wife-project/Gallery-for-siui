@@ -1,8 +1,8 @@
 ﻿import os
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QTextEdit
-from PyQt5.QtCore import QProcess
+from PyQt5.QtCore import QObject, QProcess
 
-class BatRunner(QMainWindow):
+class BatRunner(QObject):
     def __init__(self, bat_file_path):
         super().__init__()
         self.bat_file_path = bat_file_path

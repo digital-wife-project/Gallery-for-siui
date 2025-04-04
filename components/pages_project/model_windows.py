@@ -62,9 +62,6 @@ class ModalDownloadDialog(SiModalDialog):
         SiGlobal.siui.reloadStyleSheetRecursively(self)
         self.adjustSize()
         
-# lambda: send_custom_message(self.message_type, self.message_auto_close, self.message_auto_close_duration))
-
-
     def openFolderDialog(self):
     # 打开文件夹选择对话框
         folder_path = QFileDialog.getExistingDirectory(self, "选择安装位置")
