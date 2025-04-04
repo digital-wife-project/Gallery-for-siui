@@ -31,24 +31,8 @@ class Row_for_each_project(SiDenseHContainer):
         self.demo_push_button_text = SiPushButtonRefactor(self)
         self.Refresh()
 
-        # self.project_path=loacl_project_json_reader(self.project_name)
-        # if self.project_path !=None:
-        #     self.demo_progress_button_text.setText("开始使用")
-        #     self.demo_progress_button_text.setToolTip("点击以开始使用")
-        #     self.demo_progress_button_text.setProgress(100)
-        #     self.demo_progress_button_text.adjustSize()
-        #     self.demo_progress_button_text.clicked.connect(self.launch_click)
-        #     self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self,"bert","sdwdas")))  # 连接点击信号到槽函数
-        #     self.demo_push_button_text.adjustSize()
-        # else:
-        #     self.demo_progress_button_text.setText("开始下载")
-        #     self.demo_progress_button_text.setToolTip("点击以开始下载")
-        #     self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self,self.file_name)))
-        #     self.demo_progress_button_text.adjustSize()
-
         self.demo_push_button_text.setText("项目管理")
         self.demo_push_button_text.adjustSize()
-
 
         self.addWidget(DemoLabel(self,self.project_name,self.project_detail), "left")
         self.addWidget(self.demo_progress_button_text, "right")
@@ -76,7 +60,7 @@ class Row_for_each_project(SiDenseHContainer):
             self.demo_progress_button_text.setProgress(100)
             self.demo_progress_button_text.adjustSize()
             self.demo_progress_button_text.clicked.connect(self.launch_click)
-            self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self,"bert","sdwdas")))  # 连接点击信号到槽函数
+            self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self,self.project_name,self.project_path)))  # 连接点击信号到槽函数
             self.demo_push_button_text.adjustSize()
         else:
             self.demo_progress_button_text.setText("开始下载")
