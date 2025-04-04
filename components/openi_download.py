@@ -64,7 +64,7 @@ class OpeniDownloadWorker(QThread):
 
             # 发送信号表示解压完成
 
-            self.finished_unzipping.emit(self.project_name,(self.savepath+self.file).filename[:-4])
+            self.finished_unzipping.emit(self.project_name,(self.savepath+"//"+self.file)[:-4])
 
 
     def stop(self):

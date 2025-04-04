@@ -1,6 +1,7 @@
 ﻿import json
 
-def json_changer(json_file_path:str,project_name:str,project_path:str):
+def json_adder(project_name:str,project_path:str):
+    json_file_path = "./config/local_project.json"
     new_data={project_name:project_path}
     # 读取现有的JSON文件内容
     with open(json_file_path, 'r', encoding='utf-8-sig') as file:
@@ -43,4 +44,24 @@ def remote_project_json_reader(project_class:str):
     else:
         return None
 
-
+def json_rewriter(project_name:str, project_path:str):
+    json_file_path = "./config/local_project.json"
+    # 读取 JSON 文件
+    with open(json_file_path, 'r', encoding='utf-8-sig') as file:
+        # 解析 JSON 数据到 Python 字典
+        data = json.load(file)
+    
+    # 更改特定键的值
+    if project_name in data:
+        data[project_name] = project_path
+    else:
+        print(f"Key '{project_name}' not found in the JSON data.")
+    
+    # 将更新后的字典转换回 JSON 格式
+    updated_json_data = json.dumps(data, indent=4)
+    
+    # 将新的 JSON 数据写回文件
+    with open(json_file_path, 'w', encoding='utf-8-sig') as file:
+        file.write(updated_json_data)
+    
+    

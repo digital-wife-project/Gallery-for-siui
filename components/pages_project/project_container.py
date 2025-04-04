@@ -14,9 +14,7 @@ from .model_windows import ModalDownloadDialog
 from ..openi_download import OpeniDownloadWorker
 from ..launcher import BatRunner
 from .DemoLabel import DemoLabel
-from ..json_changer import json_changer,loacl_project_json_reader
-
-
+from ..json_changer import json_adder,loacl_project_json_reader
 
 class Row_for_each_project(SiDenseHContainer):
 
@@ -27,30 +25,31 @@ class Row_for_each_project(SiDenseHContainer):
         self.project_detail=project_detail
         self.file_name=file_name
 
-        self.project_path=loacl_project_json_reader(self.project_name)
-
         super().__init__(parent)
     
         self.demo_progress_button_text = SiProgressPushButton(self)
-        
         self.demo_push_button_text = SiPushButtonRefactor(self)
-        self.demo_push_button_text.setText("项目管理")
+        # self.Refresh()
 
+        self.project_path=loacl_project_json_reader(self.project_name)
         if self.project_path !=None:
             self.demo_progress_button_text.setText("开始使用")
             self.demo_progress_button_text.setToolTip("点击以开始使用")
             self.demo_progress_button_text.setProgress(100)
             self.demo_progress_button_text.adjustSize()
             self.demo_progress_button_text.clicked.connect(self.launch_click)
-            self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self,self.project_path)))  # 连接点击信号到槽函数
+            name = self.project_name
+            self.demo_push_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self)))  # 连接点击信号到槽函数            
             self.demo_push_button_text.adjustSize()
-
-
         else:
             self.demo_progress_button_text.setText("开始下载")
             self.demo_progress_button_text.setToolTip("点击以开始下载")
             self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self,self.file_name)))
             self.demo_progress_button_text.adjustSize()
+
+        self.demo_push_button_text.setText("项目管理")
+        self.demo_push_button_text.adjustSize()
+
 
         self.addWidget(DemoLabel(self,self.project_name,self.project_detail), "left")
         self.addWidget(self.demo_progress_button_text, "right")
@@ -70,15 +69,34 @@ class Row_for_each_project(SiDenseHContainer):
         self.launcher = BatRunner(f"{self.project_path}/launch.bat")
         self.launcher.runBatFile()
 
+    def Refresh(self):
+        self.project_path=loacl_project_json_reader(self.project_name)
+        # if self.project_path !=None:
+        #     self.demo_progress_button_text.setText("开始使用")
+        #     self.demo_progress_button_text.setToolTip("点击以开始使用")
+        #     self.demo_progress_button_text.setProgress(100)
+        #     self.demo_progress_button_text.adjustSize()
+        #     self.demo_progress_button_text.clicked.connect(self.launch_click)
+        #     name = self.project_name
+        #     self.demo_push_button_text.clicked.connect(lambda: (SiGlobal.siui.windows["MAIN_WINDOW"].layerChildPage().setChildPage(ChildPage_ProjectDetail(self,name,self.project_path))))  # 连接点击信号到槽函数            
+        #     self.demo_push_button_text.adjustSize()
+        # else:
+        #     self.demo_progress_button_text.setText("开始下载")
+        #     self.demo_progress_button_text.setToolTip("点击以开始下载")
+        #     self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self,self.file_name)))
+        #     self.demo_progress_button_text.adjustSize()
+
+
 
     def downloader(self,projectname,file_name,user_path):
-            self.demo_progress_button_text.setText("正在下载")
-            print(f"Download started for file: {user_path}")
-            self.download_worker = OpeniDownloadWorker(projectname,"wyyyz/dig",file_name,user_path)
-            self.download_worker.presentage_updated.connect(self.presentage_updated)
-            self.download_worker.on_download_finished.connect(self.download_finished)
-            self.download_worker.finished_unzipping.connect(self.unzipFinished)
-            self.download_worker.start()
+        self.demo_progress_button_text.setEnabled(False)
+        self.demo_progress_button_text.setText("正在下载")
+        print(f"Download started for file: {user_path}")
+        self.download_worker = OpeniDownloadWorker(projectname,"wyyyz/dig",file_name,user_path)
+        self.download_worker.presentage_updated.connect(self.presentage_updated)
+        self.download_worker.on_download_finished.connect(self.download_finished)
+        self.download_worker.finished_unzipping.connect(self.unzipFinished)
+        self.download_worker.start()
 
     def presentage_updated(self, percentage):
         self.demo_progress_button_text.setProgress(percentage/100)
@@ -91,7 +109,9 @@ class Row_for_each_project(SiDenseHContainer):
         self.demo_progress_button_text.setText("解压完成")
         abs_path = os.path.abspath(save_path)
         print(f"Download finished for file: {abs_path}")
-        json_changer(project_name,abs_path)
+        json_adder(project_name,abs_path)
+        self.Refresh()
+        self.demo_progress_button_text.setEnabled(True)
 
 
 

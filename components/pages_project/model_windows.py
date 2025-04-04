@@ -43,12 +43,12 @@ class ModalDownloadDialog(SiModalDialog):
         button2.colorGroup().assign(SiColor.BUTTON_PANEL, self.getColor(SiColor.INTERFACE_BG_D))
         button2.clicked.connect(self.openFolderDialog)
 
-        button3 = SiPushButton(self)
-        button3.setFixedHeight(32)
-        button3.attachment().setText("开始下载与安装")
-        button3.colorGroup().assign(SiColor.BUTTON_PANEL, self.getColor(SiColor.INTERFACE_BG_D))
-        button3.clicked.connect(lambda: parent.on_download_click.emit(self.file_name,self.user_path))
-        button3.clicked.connect(SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().closeLayer)
+        self.button3 = SiPushButton(self)
+        self.button3.setFixedHeight(32)
+        self.button3.attachment().setText("开始下载与安装")
+        self.button3.colorGroup().assign(SiColor.BUTTON_PANEL, self.getColor(SiColor.INTERFACE_BG_D))
+        self.button3.clicked.connect(lambda: parent.on_download_click.emit(self.file_name,self.user_path))
+        self.button3.clicked.connect(SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().closeLayer)
 
         button4 = SiPushButton(self)
         button4.setFixedHeight(32)
@@ -57,7 +57,7 @@ class ModalDownloadDialog(SiModalDialog):
         button4.clicked.connect(SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().closeLayer)
 
         self.buttonContainer().addWidget(button2)
-        self.buttonContainer().addWidget(button3)
+        self.buttonContainer().addWidget(self.button3)
         self.buttonContainer().addWidget(button4)
         SiGlobal.siui.reloadStyleSheetRecursively(self)
         self.adjustSize()
@@ -71,18 +71,16 @@ class ModalDownloadDialog(SiModalDialog):
         if folder_path:
             # 检查路径中是否包含中文或空格
             if re.search(r'[\u4e00-\u9fff\s]', (folder_path)):
-                send_simple_message
-                # QMessageBox.warning(self, "警告", "路径中不能包含中文或空格，请重新选择。")
+                send_simple_message(4, "路径中不能包含中文或空格，请重新选择。" ,True, 100000)
+                self.button3.setEnabled(False)
+
             else:
                 self.user_path = folder_path
                 self.label.setText(
                     f'<span style="color: {self.getColor(SiColor.TEXT_B)}">选择项目的安装位置</span><br>'
                     f'<span style="color: {self.getColor(SiColor.TEXT_B)}">当前安装位置{self.user_path}</span><br>'
-
                     )
-
-
-
+                self.button3.setEnabled(True)
 
 
 
