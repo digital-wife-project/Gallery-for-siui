@@ -37,7 +37,7 @@ class others(SiPage):
             self.push_buttons = OptionCardPlaneForWidgetDemos(self)
 
             for key, value in self.project_dic.items():
-                self.demo_dense_v_container.addWidget(Row_for_each_project(self,key,value[0],value[1]))
+                self.demo_dense_v_container.addWidget(Row_for_each_project(self,key,value[0],value[1],value[2]))
 
             self.dense_v_container.body().addWidget(self.demo_dense_v_container)
             self.dense_v_container.body().addPlaceholder(12)

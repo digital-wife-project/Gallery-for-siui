@@ -20,11 +20,12 @@ class Row_for_each_project(SiDenseHContainer):
 
     on_download_click = pyqtSignal(str,str)
 
-    def __init__(self,parent,project_name,project_detail,file_name):
+    def __init__(self,parent,project_name,insatller,project_detail,install_args):
         super().__init__(parent)
         self.project_name=project_name
+        self.insatller=insatller
         self.project_detail=project_detail
-        self.file_name=file_name
+        self.install_args=install_args
 
     
         self.demo_progress_button_text = SiProgressPushButton(self)
@@ -66,19 +67,21 @@ class Row_for_each_project(SiDenseHContainer):
         else:
             self.demo_progress_button_text.setText("开始下载")
             self.demo_progress_button_text.setToolTip("点击以开始下载")
-            self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self,self.file_name)))
+            self.demo_progress_button_text.clicked.connect(lambda: SiGlobal.siui.windows["MAIN_WINDOW"].layerModalDialog().setDialog(ModalDownloadDialog(self,self.install_args)))
             self.demo_progress_button_text.adjustSize()
 
 
     def downloader(self,projectname,file_name,user_path):
         self.demo_progress_button_text.setEnabled(False)
         self.demo_progress_button_text.setText("正在下载")
-        print(f"Download started for file: {user_path}")
-        self.download_worker = OpeniDownloadWorker(projectname,"wyyyz/dig",file_name,user_path)
-        self.download_worker.presentage_updated.connect(self.presentage_updated)
-        self.download_worker.on_download_finished.connect(self.download_finished)
-        self.download_worker.finished_unzipping.connect(self.unzipFinished)
-        self.download_worker.start()
+        if self.insatller=="openi":
+            self.download_worker = OpeniDownloadWorker(projectname,"wyyyz/dig",file_name,user_path)
+            self.download_worker.presentage_updated.connect(self.presentage_updated)
+            self.download_worker.on_download_finished.connect(self.download_finished)
+            self.download_worker.finished_unzipping.connect(self.unzipFinished)
+            self.download_worker.start()
+        if self.insatller=="pip":
+            pass
 
     def presentage_updated(self, percentage):
         self.demo_progress_button_text.setProgress(percentage/100)

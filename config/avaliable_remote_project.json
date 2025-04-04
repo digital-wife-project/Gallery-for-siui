@@ -1,30 +1,40 @@
 ﻿{
   "tts": {
     "Bert": [
+      "openi",
       "一个语言合成项目",
       "game.zip"
+    ],
+    "GPT_SO_VITS": [
+      "pip",
+      "一个语言合成项目",
+      []
     ]
   },
   "sd": {
     "SD": [
+      "openi",
       "一个SD项目",
       "HiyoriUI-0.8.0.zip"
     ]
   },
   "llm": {
-    "LLM": [
+    "GLM-6b": [
+      "pip",
       "一个LLM项目",
-      "HiyoriUI-0.8.0.zip"
+      [ "git clone https://github.moeyy.xyz/https://github.com/THUDM/ChatGLM-6B.git", "pip install -r requirements.txt" ]
     ]
   },
   "digitalhuman": {
     "DigitalHuman": [
+      "openi",
       "一个数字人项目",
       "HiyoriUI-0.8.0.zip"
     ]
   },
   "others": {
     "Others": [
+      "openi",
       "一个其他项目",
       "HiyoriUI-0.8.0.zip"
     ]
