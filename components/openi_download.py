@@ -26,7 +26,7 @@ class OpeniDownloadWorker(QThread):
         arguments = f" {self.repoid} {self.file} --cluster NPU --save_path ./tmp/"
         command = f"{filepath} {arguments}"
         print(command)
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, encoding='utf-8')
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, encoding='utf-8',errors='replace')
 
         for line in iter(process.stdout.readline, ''):
             if not self.running:
